@@ -1,27 +1,48 @@
-import { useAuth } from '@/auth/useAuth';
+import { Link } from '@tanstack/react-router';
 import { useSyncUser } from '@/hooks/useSyncUser';
-import { SignedInBadge } from '@/components/Auth/SignedInBadge';
+import { useMyPools } from '@/queries/pools';
+import { AppHeader } from '@/components/AppShell/AppHeader';
+import { Button } from '@/components/common/Button';
+import { InviteList } from '@/components/Invites/InviteList';
+import { PoolCard } from '@/components/Pool/PoolCard';
 
 export const Home = () => {
-  const { user } = useAuth();
   useSyncUser();
+  const poolsQuery = useMyPools();
+  const pools = poolsQuery.data ?? [];
 
   return (
-    <main className="flex min-h-screen flex-col">
-      <header className="flex items-center justify-between px-6 py-4">
-        <h1 className="text-2xl font-bold tracking-tight">Pointless</h1>
-        <SignedInBadge />
-      </header>
+    <div className="flex min-h-screen flex-col">
+      <AppHeader />
+      <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-4">
+        <InviteList />
 
-      <section className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-        <h2 className="text-4xl font-semibold">
-          Welcome{user?.displayName ? `, ${user.displayName.split(' ')[0]}` : ''}.
-        </h2>
-        <p className="max-w-md text-accent-100">
-          Pools and wagers will land in Phase C / Phase D. For now, you're signed in.
-        </p>
-        <p className="text-sm text-accent-200/70">v0.2.0 — Phase B in progress.</p>
-      </section>
-    </main>
+        <section className="flex flex-col gap-3">
+          <div className="flex items-baseline justify-between">
+            <h2 className="text-xs font-semibold uppercase tracking-wider text-accent-200/70">
+              My pools · {pools.length}
+            </h2>
+            <Link to="/pools/new">
+              <Button variant="primary">New pool</Button>
+            </Link>
+          </div>
+          {poolsQuery.isLoading && <p className="text-sm text-accent-200/60">Loading…</p>}
+          {!poolsQuery.isLoading && pools.length === 0 && (
+            <p className="text-sm text-accent-200/60">
+              No pools yet. Create one or accept an invite.
+            </p>
+          )}
+          {pools.length > 0 && (
+            <ul className="flex flex-col gap-3">
+              {pools.map(pool => (
+                <li key={pool._id}>
+                  <PoolCard pool={pool} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </main>
+    </div>
   );
 };
