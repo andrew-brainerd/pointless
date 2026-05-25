@@ -6,11 +6,11 @@ Frontend for **Pointless** — a points-betting web app where small private grou
 
 ## Status
 
-`v0.1.0` — **Phase A in progress.** Scaffold only: Vite + React 19 + TS + Tailwind v4 + TanStack Router/Query + Zustand + Vitest + RTL. Single home route, no auth yet. Firebase + Pusher wire up in later phases (see spec §9).
+`v0.7.0` — **Phases A through E complete; Phase F polish + READMEs done.** Live FE: Firebase Auth (Google + email link), pool/invite UX, full wager flow (create, stake, propose/confirm/dispute/admin-resolve), Pusher realtime subscriptions, notifications drawer in the header, 404 route, error boundary. 33 tests pass. **Pending v1**: the user's one-time host pick + first deploy (F-2).
 
 ## Stack
 
-Node 24 · pnpm · TypeScript · Vite 6 · React 19 · Tailwind v4 (CSS-first config in `src/app.css`) · TanStack Router (file-based, auto-generated `src/routeTree.gen.ts`) · TanStack Query · Zustand · Firebase client (Phase B) · pusher-js (Phase E) · Vitest + React Testing Library · ESLint 9 flat config · Prettier.
+Node 24 · pnpm · TypeScript · Vite 6 · React 19 · Tailwind v4 (CSS-first config in `src/app.css`) · TanStack Router (file-based, auto-generated `src/routeTree.gen.ts`) · TanStack Query · Zustand · Firebase client SDK · pusher-js · Vitest + React Testing Library · ESLint 9 flat config · Prettier.
 
 ## Setup
 
@@ -37,7 +37,13 @@ File-based via `@tanstack/router-plugin`. New pages: drop a file in `src/routes/
 
 ## Environment
 
-See [`.env.example`](.env.example). Only `VITE_`-prefixed vars are bundled to the client. Required from Phase B onward: `VITE_FIREBASE_*`. Required from Phase E onward: `VITE_PUSHER_*`.
+See [`.env.example`](.env.example). Only `VITE_`-prefixed vars are bundled to the client.
+
+| Var | Notes |
+|---|---|
+| `VITE_API_BASE_URL` | Backend `/api/v1` base URL |
+| `VITE_FIREBASE_API_KEY` / `VITE_FIREBASE_AUTH_DOMAIN` / `VITE_FIREBASE_PROJECT_ID` / `VITE_FIREBASE_APP_ID` | Web Firebase config; not secret per Firebase docs |
+| `VITE_PUSHER_KEY` / `VITE_PUSHER_CLUSTER` | Realtime; if missing the app silently runs without realtime updates |
 
 ## Firebase setup
 
@@ -52,7 +58,16 @@ Auth uses [Firebase Authentication](https://firebase.google.com/docs/auth) — c
 3. These values are **not secret** — they identify the public-facing Firebase project. Source: [Firebase docs](https://firebase.google.com/docs/projects/api-keys).
 4. Add your dev frontend origin (`http://localhost:5173`) to *Authentication → Settings → Authorized domains*.
 
-If any `VITE_FIREBASE_*` var is missing, the app falls back to a "Setup needed" screen rather than crashing (B-3, planned).
+If any `VITE_FIREBASE_*` var is missing, the app falls back to a "Setup needed" screen rather than crashing.
+
+## Deploy
+
+Static SPA — works on Vercel, Netlify, Cloudflare Pages, or Firebase Hosting (matches the Firebase Auth project nicely). Pick whichever:
+
+- **Vercel / Netlify / Cloudflare Pages**: connect the repo, build command `pnpm build`, publish dir `dist`, set the `VITE_*` env vars in the hosting dashboard.
+- **Firebase Hosting**: `firebase init hosting` → public dir `dist` → `pnpm build && firebase deploy --only hosting`. Match the Firebase project used for Auth.
+
+After first deploy, add the production origin to *Firebase console → Authentication → Settings → Authorized domains*, and to the backend's `CORS_ALLOWLIST` env var.
 
 ## Sibling repos
 

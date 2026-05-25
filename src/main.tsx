@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { QueryClientProvider } from '@tanstack/react-query';
 import { App } from '@/App';
+import { ErrorBoundary } from '@/components/AppShell/ErrorBoundary';
 import { initAuthListener } from '@/auth/useAuth';
 import { queryClient } from '@/queryClient';
 import '@/app.css';
@@ -15,8 +16,10 @@ if (!rootEl) {
 
 createRoot(rootEl).render(
   <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
+    <ErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <App />
+      </QueryClientProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );
