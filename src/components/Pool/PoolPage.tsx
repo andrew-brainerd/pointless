@@ -11,6 +11,7 @@ import { PoolInvitesPanel } from './PoolInvitesPanel';
 import { PoolSettings } from './PoolSettings';
 import { useLeavePool, usePool } from '@/queries/pools';
 import { ApiError } from '@/api/client';
+import { WagersList } from './WagersList';
 
 interface PoolPageProps {
   poolId: string;
@@ -90,6 +91,8 @@ export const PoolPage = ({ poolId }: PoolPageProps) => {
         )}
 
         {isAdmin && <PoolInvitesPanel poolId={pool._id} />}
+
+        <WagersList poolId={pool._id} />
 
         <MemberList pool={pool} />
 
