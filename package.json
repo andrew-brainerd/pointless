@@ -28,6 +28,7 @@
     "@tanstack/react-router": "^1.163.0",
     "clsx": "^2.1.1",
     "firebase": "12.13.0",
+    "pusher-js": "8.5.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "zustand": "^5.0.0"

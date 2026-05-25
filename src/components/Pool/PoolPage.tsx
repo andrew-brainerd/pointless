@@ -12,6 +12,7 @@ import { PoolSettings } from './PoolSettings';
 import { useLeavePool, usePool } from '@/queries/pools';
 import { ApiError } from '@/api/client';
 import { WagersList } from './WagersList';
+import { usePoolChannel } from '@/realtime/usePoolChannel';
 
 interface PoolPageProps {
   poolId: string;
@@ -24,6 +25,7 @@ export const PoolPage = ({ poolId }: PoolPageProps) => {
   const { user } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const [showSettings, setShowSettings] = useState(false);
+  usePoolChannel(poolId);
 
   if (poolQuery.isLoading) return <Loading />;
 

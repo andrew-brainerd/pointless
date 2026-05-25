@@ -10,6 +10,7 @@ vi.mock('./useAuth', () => ({
   useAuth: vi.fn(),
   initAuthListener: vi.fn(),
 }));
+vi.mock('@/realtime/useUserChannel', () => ({ useUserChannel: vi.fn() }));
 
 const { isFirebaseConfigured } = await import('./firebase');
 const { useAuth } = await import('./useAuth');

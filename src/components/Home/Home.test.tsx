@@ -24,6 +24,12 @@ vi.mock('@/queries/pools', () => ({
 vi.mock('@/queries/invites', () => ({
   useMyInvites: vi.fn(() => ({ data: [], isLoading: false })),
 }));
+vi.mock('@/queries/notifications', () => ({
+  useNotifications: vi.fn(() => ({ data: [], isLoading: false })),
+  useMarkAllRead: vi.fn(() => ({ mutate: vi.fn(), isPending: false })),
+  useMarkNotificationRead: vi.fn(() => ({ mutate: vi.fn(), isPending: false })),
+  useDismissNotification: vi.fn(() => ({ mutate: vi.fn(), isPending: false })),
+}));
 
 const { Home } = await import('./Home');
 const { useMyPools: useMyPoolsImported } = await import('@/queries/pools');

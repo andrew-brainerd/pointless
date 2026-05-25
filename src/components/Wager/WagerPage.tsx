@@ -8,6 +8,7 @@ import { Card } from '@/components/common/Card';
 import { Loading } from '@/components/common/Loading';
 import { useCancelWager, useDeclineWager, useWager } from '@/queries/wagers';
 import { usePool } from '@/queries/pools';
+import { usePoolChannel } from '@/realtime/usePoolChannel';
 import { ResolutionPanel } from './ResolutionPanel';
 import { StakeForm } from './StakeForm';
 import { statusClasses, statusLabel } from './statusBadge';
@@ -59,6 +60,7 @@ const WagerPageInner = ({ wager, myUid, onBack }: WagerPageInnerProps) => {
   const cancel = useCancelWager(wager.poolId, wager._id);
   const decline = useDeclineWager(wager.poolId, wager._id);
   const [error, setError] = useState<string | null>(null);
+  usePoolChannel(wager.poolId);
 
   if (poolQuery.isLoading) return <Loading />;
   if (!poolQuery.data) return null;
